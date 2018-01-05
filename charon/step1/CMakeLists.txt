@@ -3,4 +3,6 @@ project(test_functor_type)
 
 set(CMAKE_CXX_STANDARD 98)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/..)
+
 add_executable(test_functor_type main.cpp FunctionSignature.hpp)
