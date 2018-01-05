@@ -2,11 +2,12 @@
 // Created by sylva on 05/01/2018.
 //
 
-#include <iostream>
+#include <cstdio>
+#include <string>
 #include "FunctionSignature.hpp"
 
 int display(const std::string &str) {
-    std::printf(str.c_str());
+    printf(str.c_str());
     return 0;
 }
 
