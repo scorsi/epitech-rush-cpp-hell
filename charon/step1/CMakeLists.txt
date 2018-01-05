@@ -3,6 +3,10 @@ project(test_functor_type)
 
 set(CMAKE_CXX_STANDARD 98)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/..)
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/..)
+else (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+endif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
 
 add_executable(test_functor_type main.cpp FunctionSignature.hpp)
