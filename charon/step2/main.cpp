@@ -1,26 +1,25 @@
 #include <cstdio>
 #include <string>
 #include <functional>
-#include <type_traits>
 #include "Function.hpp"
 
 int test() {
-    printf("hello\n");
+    printf("Test without argument to Function\n");
     return 42;
 }
 
 void toto(int a) {
-    printf("%d\n", a);
+    printf("Testing passing an integer to Function, it's value is: %d\n", a);
 }
 
 void pp4(int a, int b, int c, int d) {
-    printf("%d %d %d %d\n", a, b, c, d);
+    printf("Testing with 4 argument to Function, their value are: %d %d %d %d\n", a, b, c, d);
 }
 
 class Test {
 public:
     void operator()() {
-        printf("hey\n");
+        printf("Testing with a callable object as parameter to Function\n");
     }
 };
 
@@ -28,8 +27,8 @@ int main() {
     Function<int()> f0 = &test;
     f0();
 
-    Function<int()> f1 = std::bind(&test);
-    f1();
+    //Function<int()> f1 = std::bind(&test);
+    //f1();
 
     Function<void()> f2 = Test();
     f2();
