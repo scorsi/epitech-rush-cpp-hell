@@ -2,8 +2,8 @@
 // Created by sylva on 05/01/2018.
 //
 
-#ifndef STEP1_FUNCTIONSIGNATURE_HPP
-#define STEP1_FUNCTIONSIGNATURE_HPP
+#ifndef STEP2_FUNCTION_HPP
+#define STEP2_FUNCTION_HPP
 
 #include <functional>
 
@@ -14,20 +14,57 @@ template<typename RetType>
 class Function<RetType()> {
 private:
 
-    RetType (*fun)();
+    class Wrapper {
+    public:
+        virtual ~Wrapper() = default;
+
+        virtual RetType call() = 0;
+    };
+
+    class WrapperFun : public Wrapper {
+    public:
+        RetType (*fun)();
+
+        explicit WrapperFun(RetType (*fun)()) : fun(fun) {}
+
+        virtual ~WrapperFun() = default;
+
+        virtual RetType call() {
+            return this->fun();
+        }
+    };
+
+    template <typename T>
+    class WrapperCallable : public Wrapper {
+    public:
+        T callable;
+        explicit WrapperCallable(T callable) : callable(callable) {}
+
+        virtual ~WrapperCallable() = default;
+
+        virtual RetType call() {
+            return this->callable();
+        }
+    };
+
+    Wrapper *wrapper;
 
 public:
     Function(RetType (*fun)()) {
-        this->fun = fun;
+        this->wrapper = new WrapperFun(fun);
     }
 
-    virtual Function<RetType()> &operator=(RetType (*fun)()) {
-        this->fun = fun;
-        return *this;
+    template <typename T>
+    Function(T callable) {
+        this->wrapper = new WrapperCallable<T>(callable);
     }
 
-    virtual RetType operator()() {
-        return this->fun();
+    ~Function() {
+        delete this->wrapper;
+    }
+
+    RetType operator()() {
+        return this->wrapper->call();
     }
 };
 
@@ -116,25 +153,4 @@ public:
     }
 };
 
-/*
-template<typename RetType, typename ArgType1>
-struct FunctionSignature<RetType(ArgType1)> {
-    typedef RetType (*type)(ArgType1);
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2>
-struct FunctionSignature<RetType(ArgType1, ArgType2)> {
-    typedef RetType (*type)(ArgType1, ArgType2);
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2, typename ArgType3>
-struct FunctionSignature<RetType(ArgType1, ArgType2, ArgType3)> {
-    typedef RetType (*type)(ArgType1, ArgType2, ArgType3);
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2, typename ArgType3, typename ArgType4>
-struct FunctionSignature<RetType(ArgType1, ArgType2, ArgType3, ArgType4)> {
-    typedef RetType (*type)(ArgType1, ArgType2, ArgType3, ArgType4);
-};
-*/
-#endif //STEP1_FUNCTIONSIGNATURE_HPP
+#endif //STEP2_FUNCTION_HPP
