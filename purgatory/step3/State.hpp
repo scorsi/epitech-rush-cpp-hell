@@ -7,6 +7,7 @@
 
 #include <map>
 #include <vector>
+#include <algorithm>
 #include <string>
 
 class State {
@@ -18,8 +19,6 @@ public:
     const int idx;
     const bool finalState;
     char transition;
-
-    State() = delete;
 
 private:
     explicit State(std::string &name, const int idx, const char transition, bool finalState)
