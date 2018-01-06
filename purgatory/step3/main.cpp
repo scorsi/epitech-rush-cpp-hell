@@ -23,6 +23,9 @@ int main()
   printf("%s => %s : %d\n", "evila", ret ? "true" : "false", n);
   ret = m.find("evilevilevilevil", n);
   printf("%s => %s : %d\n", "evilevilevilevil", ret ? "true" : "false", n);
-
+  ret = m.find("eeeeeeeeevil", n);
+  printf("%s => %s : %d\n", "eeeeeeeeevil", ret ? "true" : "false", n);
+  ret = m.find("valaevial", n);
+  printf("%s => %s : %d\n", "valaevial", ret ? "true" : "false", n);
   return 0;
 }
