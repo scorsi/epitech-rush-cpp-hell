@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(test_dynamic_fsa)
+project(test_nsa_to_dfa)
 
 set(CMAKE_CXX_STANDARD 98)
 
