@@ -5,152 +5,83 @@
 #ifndef STEP2_FUNCTION_HPP
 #define STEP2_FUNCTION_HPP
 
-#include <functional>
-
 template<typename>
 class Function;
 
-template<typename RetType>
-class Function<RetType()> {
-private:
+#define Template_Repeat_WS_Array_0(T)
+#define Template_Repeat_WS_Array_1(T) Template_Repeat_WS_Array_0(T), T##1
+#define Template_Repeat_WS_Array_2(T) Template_Repeat_WS_Array_1(T), T##2
+#define Template_Repeat_WS_Array_3(T) Template_Repeat_WS_Array_2(T), T##3
+#define Template_Repeat_WS_Array_4(T) Template_Repeat_WS_Array_3(T), T##4
+#define Template_Repeat_WS(N, T) Template_Repeat_WS_Array_##N(T)
 
-    class Wrapper {
-    public:
-        virtual ~Wrapper() = default;
+#define Template_Repeat_Array_0(T)
+#define Template_Repeat_Array_1(T) T##1
+#define Template_Repeat_Array_2(T) Template_Repeat_Array_1(T), T##2
+#define Template_Repeat_Array_3(T) Template_Repeat_Array_2(T), T##3
+#define Template_Repeat_Array_4(T) Template_Repeat_Array_3(T), T##4
+#define Template_Repeat(N, T) Template_Repeat_Array_##N(T)
 
-        virtual RetType call() = 0;
-    };
+#define Template_Arg_Repeat_Array_0(T, VAR)
+#define Template_Arg_Repeat_Array_1(T, VAR) T##1 VAR##1
+#define Template_Arg_Repeat_Array_2(T, VAR) Template_Arg_Repeat_Array_1(T, VAR), T##2 VAR##2
+#define Template_Arg_Repeat_Array_3(T, VAR) Template_Arg_Repeat_Array_2(T, VAR), T##3 VAR##3
+#define Template_Arg_Repeat_Array_4(T, VAR) Template_Arg_Repeat_Array_3(T, VAR), T##4 VAR##4
+#define Template_Arg_Repeat(N, T, VAR) Template_Arg_Repeat_Array_##N(T, VAR)
 
-    class WrapperFun : public Wrapper {
-    public:
-        RetType (*fun)();
-
-        explicit WrapperFun(RetType (*fun)()) : fun(fun) {}
-
-        virtual ~WrapperFun() = default;
-
-        virtual RetType call() {
-            return this->fun();
-        }
-    };
-
-    template <typename T>
-    class WrapperCallable : public Wrapper {
-    public:
-        T callable;
-        explicit WrapperCallable(T callable) : callable(callable) {}
-
-        virtual ~WrapperCallable() = default;
-
-        virtual RetType call() {
-            return this->callable();
-        }
-    };
-
-    Wrapper *wrapper;
-
-public:
-    Function(RetType (*fun)()) {
-        this->wrapper = new WrapperFun(fun);
-    }
-
-    template <typename T>
-    Function(T callable) {
-        this->wrapper = new WrapperCallable<T>(callable);
-    }
-
-    ~Function() {
-        delete this->wrapper;
-    }
-
-    RetType operator()() {
-        return this->wrapper->call();
-    }
+#define Function_Declaration_Template(N_ARG) \
+template<typename RetType Template_Repeat_WS(N_ARG, typename ArgType)> \
+class Function<RetType(Template_Repeat(N_ARG, ArgType))> { \
+private: \
+    class Wrapper { \
+    public: \
+        virtual RetType call(Template_Arg_Repeat(N_ARG, ArgType, arg)) = 0; \
+    }; \
+    class WrapperFun : public Wrapper { \
+    private: \
+        RetType (*fun)(Template_Repeat(N_ARG, ArgType)); \
+    public: \
+        explicit WrapperFun(RetType (*fun)(Template_Repeat(N_ARG, ArgType))) : fun(fun) {} \
+        virtual RetType call(Template_Arg_Repeat(N_ARG, ArgType, arg)) { \
+            return this->fun(Template_Repeat(N_ARG, arg)); \
+        } \
+    }; \
+    template <typename T> \
+    class WrapperCallable : public Wrapper { \
+    public: \
+        T callable; \
+        explicit WrapperCallable(T callable) : callable(callable) {} \
+        virtual ~WrapperCallable() {} \
+        virtual RetType call(Template_Arg_Repeat(N_ARG, ArgType, arg)) { \
+            return this->callable(Template_Repeat(N_ARG, arg)); \
+        } \
+    }; \
+     \
+    Wrapper *wrapper; \
+     \
+public: \
+    Function(RetType (*fun)(Template_Repeat(N_ARG, ArgType))) { \
+        this->wrapper = new WrapperFun(fun); \
+    } \
+     \
+    template <typename T> \
+    Function(T callable) { \
+        this->wrapper = new WrapperCallable<T>(callable); \
+    } \
+     \
+    ~Function() { \
+        delete this->wrapper; \
+    } \
+     \
+    RetType operator()(Template_Arg_Repeat(N_ARG, ArgType, arg)) { \
+        return this->wrapper->call(Template_Repeat(N_ARG, arg)); \
+    } \
 };
 
-template<typename RetType, typename ArgType1>
-class Function<RetType(ArgType1)> {
-private:
-
-    RetType (*fun)(ArgType1);
-
-public:
-    Function(RetType (*fun)(ArgType1)) {
-        this->fun = fun;
-    }
-
-    virtual Function<RetType(ArgType1)> &operator=(RetType (*fun)(ArgType1)) {
-        this->fun = fun;
-        return *this;
-    }
-
-    virtual RetType operator()(ArgType1 arg1) {
-        return this->fun(arg1);
-    }
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2>
-class Function<RetType(ArgType1, ArgType2)> {
-private:
-
-    RetType (*fun)(ArgType1, ArgType2);
-
-public:
-    Function(RetType (*fun)(ArgType1, ArgType2)) {
-        this->fun = fun;
-    }
-
-    virtual Function<RetType(ArgType1, ArgType2)> &operator=(RetType (*fun)(ArgType1, ArgType2)) {
-        this->fun = fun;
-        return *this;
-    }
-
-    virtual RetType operator()(ArgType1 arg1, ArgType2 arg2) {
-        return this->fun(arg1, arg2);
-    }
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2, typename ArgType3>
-class Function<RetType(ArgType1, ArgType2, ArgType3)> {
-private:
-
-    RetType (*fun)(ArgType1, ArgType2, ArgType3);
-
-public:
-    Function(RetType (*fun)(ArgType1, ArgType2, ArgType3)) {
-        this->fun = fun;
-    }
-
-    virtual Function<RetType(ArgType1, ArgType2, ArgType3)> &operator=(RetType (*fun)(ArgType1, ArgType2, ArgType3)) {
-        this->fun = fun;
-        return *this;
-    }
-
-    virtual RetType operator()(ArgType1 arg1, ArgType2 arg2, ArgType3 arg3) {
-        return this->fun(arg1, arg2, arg3);
-    }
-};
-
-template<typename RetType, typename ArgType1, typename ArgType2, typename ArgType3, typename ArgType4>
-class Function<RetType(ArgType1, ArgType2, ArgType3, ArgType4)> {
-private:
-
-    RetType (*fun)(ArgType1, ArgType2, ArgType3, ArgType4);
-
-public:
-    Function(RetType (*fun)(ArgType1, ArgType2, ArgType3, ArgType4)) {
-        this->fun = fun;
-    }
-
-    virtual Function<RetType(ArgType1, ArgType2, ArgType3, ArgType4)> &
-    operator=(RetType (*fun)(ArgType1, ArgType2, ArgType3, ArgType4)) {
-        this->fun = fun;
-        return *this;
-    }
-
-    virtual RetType operator()(ArgType1 arg1, ArgType2 arg2, ArgType3 arg3, ArgType4 arg4) {
-        return this->fun(arg1, arg2, arg3, arg4);
-    }
-};
+Function_Declaration_Template(0)
+Function_Declaration_Template(1)
+Function_Declaration_Template(2)
+Function_Declaration_Template(3)
+Function_Declaration_Template(4)
 
 #endif //STEP2_FUNCTION_HPP

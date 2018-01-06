@@ -13,10 +13,14 @@ void toto(int a) {
     printf("%d\n", a);
 }
 
+void pp4(int a, int b, int c, int d) {
+    printf("%d %d %d %d\n", a, b, c, d);
+}
+
 class Test {
 public:
     void operator()() {
-        std::printf("hey");
+        printf("hey\n");
     }
 };
 
@@ -29,6 +33,12 @@ int main() {
 
     Function<void()> f2 = Test();
     f2();
+
+    Function<void(int)> f3 = &toto;
+    f3(42);
+
+    Function<void(int, int, int, int)> f4 = &pp4;
+    f4(1, 2, 3, 4);
 
     return 0;
 }
