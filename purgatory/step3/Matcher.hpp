@@ -35,7 +35,9 @@ public:
                         s = ns;
                     }
                 }
-            }
+            } else {
+	      s = this->fsa.initialState;
+	    }
         }
         return n > 0;
     }

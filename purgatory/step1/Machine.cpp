@@ -72,17 +72,18 @@ bool state_machine(const char *str)
     switch (action)
     {
       case MA:
-	printf("%c = MA\n", str[idx]);
+	printf("%c = MOVE APPEND FROM %d TO %d\n", str[idx], state, stateTable[state][o_idx]);
 	state = stateTable[state][o_idx];
 	break;
       case HR:
-	printf("%c = HR\n", str[idx]);
+	printf("%c = SUCCESS, RESET TO 0\n", str[idx]);
 	state = S0;
 	isError = false;
 	break;
       default:
-	printf("%c = END\n", str[idx]);
-	return isError;
+	printf("%c = FAILED, return to 0\n", str[idx]);
+	state = S0;
+	break;
     }
   }
   printf("%c = END\n", '\0');
