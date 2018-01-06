@@ -52,9 +52,10 @@ std::map<State, std::vector<State> > stateTable = my_make_map<State, std::vector
 std::map<State, std::vector<Action> > actionTable = my_make_map<State, std::vector<Action> >(actionp);
 const char *state_machine_str = "evil";
 
-Action state_machine(const char *str)
+bool state_machine(const char *str)
 {
   State state = S0;
+  bool isError = true;
   for (int idx = 0; str[idx]; ++idx)
   {
     int o_idx;
@@ -69,12 +70,14 @@ Action state_machine(const char *str)
 	break;
       case HR:
 	printf("%c = HR\n", str[idx]);
-	return HR;
+	state = S0;
+	isError = false;
+	break;
       default:
-	printf("%c = ERROR\n", str[idx]);
-	return ACTION_ERROR;
+	printf("%c = END\n", str[idx]);
+	return !isError;
     }
   }
-  printf("%c = ERROR\n", '\0');
-  return ACTION_ERROR;
+  printf("%c = END\n", '\0');
+  return !isError;
 }

@@ -37,7 +37,7 @@ std::map<T1, T2> my_make_map(const std::pair<T1, T2> (&data)[N]) {
   return std::map<T1, T2>(data, data + sizeof(data) / sizeof(data[0]));
 };
 
-Action state_machine(const char *str);
+bool state_machine(const char *str);
 
 extern std::map<State, std::vector<State> > stateTable;
 extern std::map<State, std::vector<Action> > actionTable;

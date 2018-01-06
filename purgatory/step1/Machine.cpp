@@ -26,7 +26,8 @@
 const State ls0[] = {S1, STATE_ERROR, STATE_ERROR, STATE_ERROR, STATE_ERROR};
 const State ls1[] = {STATE_ERROR, S2, STATE_ERROR, STATE_ERROR, STATE_ERROR};
 const State ls2[] = {STATE_ERROR, STATE_ERROR, S3, STATE_ERROR, STATE_ERROR};
-const State ls3[] = {STATE_ERROR, STATE_ERROR, STATE_ERROR, STATE_ERROR, STATE_ERROR};
+const State ls3[] = {STATE_ERROR, STATE_ERROR, STATE_ERROR, STATE_ERROR,
+		     STATE_ERROR};
 
 const std::pair<State, std::vector<State> > statep[] = {
   my_make_pair<State, std::vector<State> >(S0, my_make_vector<State>(ls0)),
@@ -35,10 +36,14 @@ const std::pair<State, std::vector<State> > statep[] = {
   my_make_pair<State, std::vector<State> >(S3, my_make_vector<State>(ls3))
 };
 
-const Action la0[] = {MA, ACTION_ERROR, ACTION_ERROR, ACTION_ERROR, ACTION_ERROR};
-const Action la1[] = {ACTION_ERROR, MA, ACTION_ERROR, ACTION_ERROR, ACTION_ERROR};
-const Action la2[] = {ACTION_ERROR, ACTION_ERROR, MA, ACTION_ERROR, ACTION_ERROR};
-const Action la3[] = {ACTION_ERROR, ACTION_ERROR, ACTION_ERROR, HR, ACTION_ERROR};
+const Action la0[] = {MA, ACTION_ERROR, ACTION_ERROR, ACTION_ERROR,
+		      ACTION_ERROR};
+const Action la1[] = {ACTION_ERROR, MA, ACTION_ERROR, ACTION_ERROR,
+		      ACTION_ERROR};
+const Action la2[] = {ACTION_ERROR, ACTION_ERROR, MA, ACTION_ERROR,
+		      ACTION_ERROR};
+const Action la3[] = {ACTION_ERROR, ACTION_ERROR, ACTION_ERROR, HR,
+		      ACTION_ERROR};
 
 const std::pair<State, std::vector<Action> > actionp[] = {
   my_make_pair<State, std::vector<Action> >(S0, my_make_vector<Action>(la0)),
@@ -47,14 +52,17 @@ const std::pair<State, std::vector<Action> > actionp[] = {
   my_make_pair<State, std::vector<Action> >(S3, my_make_vector<Action>(la3))
 };
 
-std::map<State, std::vector<State> > stateTable = my_make_map<State, std::vector<State> >(statep);
+std::map<State, std::vector<State> > stateTable = my_make_map<State, std::vector<State> >(
+  statep);
 
-std::map<State, std::vector<Action> > actionTable = my_make_map<State, std::vector<Action> >(actionp);
+std::map<State, std::vector<Action> > actionTable = my_make_map<State, std::vector<Action> >(
+  actionp);
 const char *state_machine_str = "evil";
 
-Action state_machine(const char *str)
+bool state_machine(const char *str)
 {
   State state = S0;
+  bool isError = true;
   for (int idx = 0; str[idx]; ++idx)
   {
     int o_idx;
@@ -69,12 +77,14 @@ Action state_machine(const char *str)
 	break;
       case HR:
 	printf("%c = HR\n", str[idx]);
-	return HR;
+	state = S0;
+	isError = false;
+	break;
       default:
-	printf("%c = ERROR\n", str[idx]);
-	return ACTION_ERROR;
+	printf("%c = END\n", str[idx]);
+	return isError;
     }
   }
-  printf("%c = ERROR\n", '\0');
-  return ACTION_ERROR;
+  printf("%c = END\n", '\0');
+  return isError;
 }
