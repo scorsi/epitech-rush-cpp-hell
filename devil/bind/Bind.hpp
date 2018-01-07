@@ -51,7 +51,7 @@ class TypeList5 : private Storage5<T1, T2, T3, T4, T5> {
 };
 
 template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-class TypeList6 : private Storage6<T1, T2, T3, T4, T5> {
+class TypeList6 : private Storage6<T1, T2, T3, T4, T5, T6> {
 
 };
 
