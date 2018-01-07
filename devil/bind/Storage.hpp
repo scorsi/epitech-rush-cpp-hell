@@ -32,6 +32,8 @@ Macro_Storage_Generator(6, 5)
 
 class TypeList0 : private Storage0 {
 public:
+    TypeList0() {}
+
     template<typename T>
     T &operator[](Value<T> &t) {
         return t.get();
