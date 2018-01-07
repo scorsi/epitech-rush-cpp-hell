@@ -7,6 +7,11 @@
 
 #include "Storage.hpp"
 
+template<typename ReturnType>
+ReturnType bind() {
+
+}
+
 template<typename ReturnType, typename Callable, typename List>
 class Caller {
 private:
