@@ -60,7 +60,7 @@ public:
 };
 
 template<typename Callable, typename List>
-class Caller<void> {
+class Caller<void, Callable, List> {
 private:
     Callable _callable;
     List _list;
