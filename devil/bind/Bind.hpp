@@ -19,7 +19,8 @@ public:
     Caller(const Callable &callable, const List &list) : _callable(callable), _list(list) {}
 
     ReturnType operator()() {
-        return this->_list(TypeTraits<ReturnType>(), this->_callable, TypeList0());
+        TypeList0 list;
+        return this->_list(TypeTraits<ReturnType>(), this->_callable, list);
     }
 
     template<typename T1>
@@ -69,7 +70,8 @@ public:
     Caller(const Callable &callable, const List &list) : _callable(callable), _list(list) {}
 
     void operator()() {
-        this->_list(TypeTraits<void>(), this->_callable, TypeList0());
+        TypeList0 list;
+        this->_list(TypeTraits<void>(), this->_callable, list);
     }
 
     template<typename T1>
@@ -111,13 +113,15 @@ public:
 
 template<typename ReturnType>
 Caller<ReturnType, ReturnType (*)(), TypeList0> bind(ReturnType (*callable)()) {
-    return Caller<ReturnType, ReturnType (*)(), TypeList0>(callable, TypeList0());
+    TypeList0 list;
+    return Caller<ReturnType, ReturnType (*)(), TypeList0>(callable, list);
 }
 
 #define Macro_Bind_Function_Generator(N) \
 template<typename ReturnType, Macro_Repeat_1(N, typename ArgType)> \
 Caller<ReturnType, ReturnType (*)(Macro_Repeat_1(N, ArgType)), TypeList##N<Macro_Repeat_1(N, ArgType)> > bind(ReturnType (*callable)(Macro_Repeat_1(N, ArgType)), Macro_Repeat_2(N, ArgType, arg)) { \
-    return Caller<ReturnType, ReturnType (*)(Macro_Repeat_1(N, ArgType)), TypeList##N<Macro_Repeat_1(N, ArgType)> >(callable, TypeList##N<Macro_Repeat_1(N, ArgType)>(Macro_Repeat_1(N, arg))); \
+    TypeList##N<Macro_Repeat_1(N, ArgType)> list = TypeList##N<Macro_Repeat_1(N, ArgType)>(Macro_Repeat_1(N, arg)); \
+    return Caller<ReturnType, ReturnType (*)(Macro_Repeat_1(N, ArgType)), TypeList##N<Macro_Repeat_1(N, ArgType)> >(callable, list); \
 }
 
 Macro_Bind_Function_Generator(1)
@@ -129,15 +133,16 @@ Macro_Bind_Function_Generator(6)
 
 #undef Macro_Bind_Function_Generator
 
-#define Macro_Bind_Callable_Generator(N) \
-template<typename ReturnType, typename Callable, Macro_Repeat_1(N, typename ArgType)> \
-Caller<ReturnType, Callable, TypeList##N<Macro_Repeat_1(N, ArgType)> > bind(Callable &callable, Macro_Repeat_2(N, ArgType, arg)) { \
-    return Caller<ReturnType, Callable, TypeList##N<Macro_Repeat_1(N, ArgType)> >(callable, TypeList##N<Macro_Repeat_1(N, ArgType)>(Macro_Repeat_1(N, arg))); \
-}
-
 template<typename ReturnType, typename Callable>
 Caller<ReturnType, Callable, TypeList0> bind(Callable &callable) {
     return Caller<ReturnType, Callable, TypeList0>(callable, TypeList0());
+}
+
+#define Macro_Bind_Callable_Generator(N) \
+template<typename ReturnType, typename Callable, Macro_Repeat_1(N, typename ArgType)> \
+Caller<ReturnType, Callable, TypeList##N<Macro_Repeat_1(N, ArgType)> > bind(Callable &callable, Macro_Repeat_2(N, ArgType, arg)) { \
+    TypeList##N<Macro_Repeat_1(N, ArgType)> list = TypeList##N<Macro_Repeat_1(N, ArgType)>(Macro_Repeat_1(N, arg)); \
+    return Caller<ReturnType, Callable, TypeList##N<Macro_Repeat_1(N, ArgType)> >(callable, list); \
 }
 
 Macro_Bind_Callable_Generator(1)
