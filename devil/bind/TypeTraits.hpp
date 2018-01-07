@@ -10,10 +10,13 @@ class Value {
 private:
   T &t;
 
+public:
+  typedef T type;
+
   T &get() { return this->t; }
 
   T const &get() const { return  this->t; }
- };
+};
 
 template<class T>
 class GetType
@@ -24,6 +27,5 @@ public:
 
 template<class T>
 struct TypeTraits {};
-};
 
 #endif //BIND_TYPETRAITS_HPP
