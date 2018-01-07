@@ -39,11 +39,10 @@ int main() {
     Caller<int, int (*)(), TypeList0> f0 = bind(&printtest);
     f0();
 
-    Caller<int, int (*)(int, int), TypeList2<int, int>> f1 = bind(&addtest, 1, 2);
+    Caller<int, int (*)(int, int), TypeList2<int, int> > f1 = bind(&addtest, 1, 2);
     f1();
 
-    Caller<void, void (*)(int, int, int, int, int, int), TypeList6<int, int, int, int, int, int>> f2 = bind(&toto, 1, 2,
-                                                                                                            3, 4, 5, 6);
+    Caller<void, void (*)(int, int, int, int, int, int), TypeList6<int, int, int, int, int, int> > f2 = bind(&toto, 1, 2, 3, 4, 5, 6);
     f2();
 
     foobar foobar1;
@@ -51,8 +50,9 @@ int main() {
     Caller<void, foobar, TypeList0> f3 = bind<void>(foobar1);
     f3();
 
-    Caller<void, foobar, TypeList1<int>> f4 = bind<void>(foobar1, 42);
+    Caller<void, foobar, TypeList1<int> > f4 = bind<void>(foobar1, 42);
     f4();
+    f4(32);
 
     const foobar const_foobar1 = foobar();
     Caller<void, const foobar, TypeList0> f5 = bind<void>(const_foobar1);

@@ -48,39 +48,11 @@ public:
     }
 };
 
-#define Macro_TypeList_Repeat_2_Array_1(T1, T2) T1##1##T2
-#define Macro_TypeList_Repeat_2_Array_2(T1, T2) Macro_TypeList_Repeat_2_Array_1(T1, T2), T1##2##T2
-#define Macro_TypeList_Repeat_2_Array_3(T1, T2) Macro_TypeList_Repeat_2_Array_2(T1, T2), T1##3##T2
-#define Macro_TypeList_Repeat_2_Array_4(T1, T2) Macro_TypeList_Repeat_2_Array_3(T1, T2), T1##4##T2
-#define Macro_TypeList_Repeat_2_Array_5(T1, T2) Macro_TypeList_Repeat_2_Array_4(T1, T2), T1##5##T2
-#define Macro_TypeList_Repeat_2_Array_6(T1, T2) Macro_TypeList_Repeat_2_Array_5(T1, T2), T1##6##T2
-#define Macro_TypeList_Repeat_2(N, T1, T2) Macro_TypeList_Repeat_2_Array_##N(T1, T2)
-
-#define Macro_TypeList_Generator(N) \
-template<Macro_Repeat_1(N, typename T)> \
-class TypeList##N : private Storage##N<Macro_TypeList_Repeat_2(N, Value<T, >)> { \
-public: \
-    TypeList##N(Macro_Repeat_2(N, T, &t)) : \
-            Storage##N<Macro_TypeList_Repeat_2(N, Value<T, >)>(Value(a)) {} \
-    template<typename T> \
-    T &operator[](Value<T> &t) { \
-        return t.get(); \
-    } \
-    template<typename T> \
-    const T &operator[](Value<T> &t) const { \
-        return t.get(); \
-    } \
-    template<typename ReturnType, typename Callable, typename List> \
-    ReturnType operator()(TypeTraits<ReturnType>, Callable callable, List &list) { \
-        return callable(list[Storage1::_t1]); \
-    } \
-};
-
 template<typename T1>
-class TypeList1 : private Storage1<Value<T1>> {
+class TypeList1 : private Storage1<Value<T1> > {
 public:
     TypeList1(T1 &a) :
-            Storage1<Value<T1>>(Value<T1>(a)) {}
+            Storage1<Value<T1> >(Value<T1>(a)) {}
 
     template<typename T>
     T &operator[](Value<T> &t) {
@@ -99,10 +71,10 @@ public:
 };
 
 template<typename T1, typename T2>
-class TypeList2 : private Storage2<Value<T1>, Value<T2>> {
+class TypeList2 : private Storage2<Value<T1>, Value<T2> > {
 public:
     TypeList2(T1 &a, T2 &b) :
-            Storage2<Value<T1>, Value<T2>>(Value<T1>(a), Value<T2>(b)) {}
+            Storage2<Value<T1>, Value<T2> >(Value<T1>(a), Value<T2>(b)) {}
 
     template<typename T>
     T &operator[](Value<T> &t) {
@@ -121,10 +93,10 @@ public:
 };
 
 template<typename T1, typename T2, typename T3>
-class TypeList3 : private Storage3<Value<T1>, Value<T2>, Value<T3>> {
+class TypeList3 : private Storage3<Value<T1>, Value<T2>, Value<T3> > {
 public:
     TypeList3(T1 &a, T2 &b, T3 &c) :
-            Storage3<Value<T1>, Value<T2>, Value<T3>>(Value<T1>(a), Value<T2>(b), Value<T3>(c)) {}
+            Storage3<Value<T1>, Value<T2>, Value<T3> >(Value<T1>(a), Value<T2>(b), Value<T3>(c)) {}
 
 
     template<typename T>
@@ -144,10 +116,10 @@ public:
 };
 
 template<typename T1, typename T2, typename T3, typename T4>
-class TypeList4 : private Storage4<Value<T1>, Value<T2>, Value<T3>, Value<T4>> {
+class TypeList4 : private Storage4<Value<T1>, Value<T2>, Value<T3>, Value<T4> > {
 public:
     TypeList4(T1 &a, T2 &b, T3 &c, T4 &d) :
-            Storage4<Value<T1>, Value<T2>, Value<T3>, Value<T4>>(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d)) {}
+            Storage4<Value<T1>, Value<T2>, Value<T3>, Value<T4> >(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d)) {}
 
 
     template<typename T>
@@ -167,10 +139,10 @@ public:
 };
 
 template<typename T1, typename T2, typename T3, typename T4, typename T5>
-class TypeList5 : private Storage5<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>> {
+class TypeList5 : private Storage5<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5> > {
 public:
     TypeList5(T1 &a, T2 &b, T3 &c, T4 &d, T5 &e) :
-            Storage5<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>>(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d), Value<T5>(e)) {}
+            Storage5<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5> >(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d), Value<T5>(e)) {}
 
 
     template<typename T>
@@ -190,10 +162,10 @@ public:
 };
 
 template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
-class TypeList6 : private Storage6<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>, Value<T6>> {
+class TypeList6 : private Storage6<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>, Value<T6> > {
 public:
     TypeList6(T1 &a, T2 &b, T3 &c, T4 &d, T5 &e, T6 &f) :
-            Storage6<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>, Value<T6>>(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d), Value<T5>(e), Value<T6>(f)) {}
+            Storage6<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>, Value<T6> >(Value<T1>(a), Value<T2>(b), Value<T3>(c), Value<T4>(d), Value<T5>(e), Value<T6>(f)) {}
 
     template<typename T>
     T &operator[](Value<T> &t) {

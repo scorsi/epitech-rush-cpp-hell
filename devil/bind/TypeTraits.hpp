@@ -29,7 +29,7 @@ public:
 };
  */
 
-template<class T>
+template <typename T>
 struct TypeTraits {};
 
 #endif //BIND_TYPETRAITS_HPP
