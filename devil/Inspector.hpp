@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <cstddef>
+#include <typeinfo>
 
 template<typename Stream, typename Object>
 struct is_printable {
@@ -14,15 +15,12 @@ struct is_printable {
     typedef char yes[1];
     typedef char no[2];
 
-    template<typename T>
-    static T &nullRef();
-
     template<size_t S = 0>
     class _IsPrintable {
     };
 
-    template<typename T, size_t U = sizeof(*((Stream *) (NULL)) << *((Object *) (NULL)))>
-    static yes &isPrintable(T *, _IsPrintable<U> * = NULL);
+    template<typename T>
+    static yes &isPrintable(T *, _IsPrintable<sizeof(*((Stream *) (NULL)) << *((T*) (NULL)))> * = NULL);
 
     template<typename>
     static no &isPrintable(...);
@@ -42,19 +40,21 @@ struct enable_if<false, T> {
 
 template<typename Stream>
 struct Printer {
-    template<typename Object, typename enable_if<is_printable<Stream, Object>::value>::type = 0>
-    static void print(Stream &stream, Object &object) {
+    template<typename Object>
+    static typename enable_if<is_printable<Stream, Object>::value, void>::type
+    print(Stream &stream, Object &object) {
         stream << object;
     }
 
-    template<typename Object, typename enable_if<!(is_printable<Stream, Object>::value)>::type = 0>
-    static void print(Stream &stream, Object &object) {
+    template<typename Object>
+    static typename enable_if<!(is_printable<Stream, Object>::value), void>::type
+    print(Stream &stream, Object &object) {
         stream << typeid(object).name();
     }
 };
 
 template<typename Stream, typename Object>
-void inspect(Stream &stream, const Object &o) {
+void inspect(Stream &stream, Object &o) {
     Printer<Stream>::print(stream, o);
 }
 
