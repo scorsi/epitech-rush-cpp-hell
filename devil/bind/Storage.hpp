@@ -5,6 +5,8 @@
 #ifndef BIND_STORAGE_HPP
 #define BIND_STORAGE_HPP
 
+#include "TypeTraits.hpp"
+
 struct Storage0 {
 };
 
@@ -42,5 +44,46 @@ Macro_Storage_Generator(3, 2)
 Macro_Storage_Generator(4, 3)
 Macro_Storage_Generator(5, 4)
 Macro_Storage_Generator(6, 5)
+
+
+class TypeList0 : private Storage0 {
+
+};
+
+template<typename T1>
+class TypeList1 : private Storage1<Value<T1>> {
+public:
+  TypeList1(T1 &a) : Storage1(Value(a)) {}
+};
+
+template<typename T1, typename T2>
+class TypeList2 : private Storage2<Value<T1>, Value<T2>> {
+public:
+  TypeList2(T1 &a, T2 &b) : Storage2(Value(a), Value(b)) {}
+};
+
+template<typename T1, typename T2, typename T3>
+class TypeList3 : private Storage3<Value<T1>, Value<T2>, Value<T3>> {
+public:
+  TypeList3(T1 &a, T2 &b, T3 &c) : Storage3(Value(a), Value(b), Value(c)) {}
+};
+
+template<typename T1, typename T2, typename T3, typename T4>
+class TypeList4 : private Storage4<Value<T1>, Value<T2>, Value<T3>, Value<T4>> {
+public:
+  TypeList4(T1 &a, T2 &b, T3 &c, T4 &d) : Storage4(Value(a), Value(b), Value(c), Value(d)) {}
+};
+
+template<typename T1, typename T2, typename T3, typename T4, typename T5>
+class TypeList5 : private Storage5<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>> {
+public:
+  TypeList5(T1 &a, T2 &b, T3 &c, T4 &d, T5 &e) : Storage5(Value(a), Value(b), Value(c), Value(d), Value(e)) {}
+};
+
+template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+class TypeList6 : private Storage6<Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>, Value<T6>> {
+public:
+  TypeList6(T1 &a, T2 &b, T3 &c, T4 &d, T5 &e, T6 &f) : Storage6(Value(a), Value(b), Value(c), Value(d), Value(e), Value(f)) {}
+};
 
 #endif //BIND_STORAGE_HPP
