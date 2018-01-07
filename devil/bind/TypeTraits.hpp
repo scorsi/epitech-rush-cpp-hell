@@ -8,7 +8,7 @@
 template<typename T>
 class Value {
 private:
-  T &t;
+  T t;
 
 public:
   typedef T type;
