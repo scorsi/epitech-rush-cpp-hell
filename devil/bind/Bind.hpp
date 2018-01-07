@@ -59,6 +59,56 @@ public:
     }
 };
 
+template<typename Callable, typename List>
+class Caller<void> {
+private:
+    Callable _callable;
+    List _list;
+
+public:
+    Caller(const Callable &callable, const List &list) : _callable(callable), _list(list) {}
+
+    void operator()() {
+        this->_list(TypeTraits<void>(), this->_callable, TypeList0());
+    }
+
+    template<typename T1>
+    void operator()(T1 t1) {
+        TypeList1<T1> list(t1);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+
+    template<typename T1, typename T2>
+    void operator()(T1 t1, T2 t2) {
+        TypeList2<T1, T2> list(t1, t2);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+
+    template<typename T1, typename T2, typename T3>
+    void operator()(T1 t1, T2 t2, T3 t3) {
+        TypeList3<T1, T2, T3> list(t1, t2, t3);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+
+    template<typename T1, typename T2, typename T3, typename T4>
+    void operator()(T1 t1, T2 t2, T3 t3, T4 t4) {
+        TypeList4<T1, T2, T3, T4> list(t1, t2, t3, t4);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+
+    template<typename T1, typename T2, typename T3, typename T4, typename T5>
+    void operator()(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5) {
+        TypeList5<T1, T2, T3, T4, T5> list(t1, t2, t3, t4, t5);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+
+    template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
+    void operator()(T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6) {
+        TypeList6<T1, T2, T3, T4, T5, T6> list(t1, t2, t3, t4, t5, t6);
+        this->_list(TypeTraits<void>(), this->_callable, list);
+    }
+};
+
 template<typename ReturnType>
 Caller<ReturnType, ReturnType (*)(), TypeList0> bind(ReturnType (*callable)()) {
     return Caller<ReturnType, ReturnType (*)(), TypeList0>(callable, TypeList0());
