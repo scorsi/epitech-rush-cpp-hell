@@ -135,7 +135,8 @@ Macro_Bind_Function_Generator(6)
 
 template<typename ReturnType, typename Callable>
 Caller<ReturnType, Callable, TypeList0> bind(Callable &callable) {
-    return Caller<ReturnType, Callable, TypeList0>(callable, TypeList0());
+    TypeList0 list;
+    return Caller<ReturnType, Callable, TypeList0>(callable, list);
 }
 
 #define Macro_Bind_Callable_Generator(N) \
